@@ -22,9 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.MapsInitializer;
+
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -45,7 +50,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 @SuppressWarnings("deprecation")
-public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver.OnScrollChangedListener{
+public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver.OnScrollChangedListener, OnMapsSdkInitializedCallback {
   private final String TAG = "GoogleMapsPlugin";
   private Activity activity;
   public ViewGroup root;
@@ -68,6 +73,8 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
     root = (ViewGroup) view.getParent();
 
     pluginManager = webView.getPluginManager();
+
+    CordovaGoogleMaps that = this;
 
     cordova.getActivity().runOnUiThread(new Runnable() {
       @SuppressLint("NewApi")
@@ -202,8 +209,7 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
         //------------------------------
         if (!initialized) {
           try {
-            MapsInitializer.initialize(cordova.getActivity());
-            initialized = true;
+            MapsInitializer.initialize(cordova.getActivity(), Renderer.LATEST, that);
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -227,6 +233,19 @@ public class CordovaGoogleMaps extends CordovaPlugin implements ViewTreeObserver
     });
     */
     return false;
+  }
+
+  @Override
+  public void onMapsSdkInitialized(@NonNull Renderer renderer) {
+    initialized = true;
+    switch (renderer) {
+      case LATEST:
+        Log.d(TAG, "The latest version of the renderer is used");
+        break;
+      case LEGACY:
+        Log.d(TAG, "The legacy version of the renderer is used");
+        break;
+    }
   }
 
 
