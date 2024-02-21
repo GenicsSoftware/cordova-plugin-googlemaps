@@ -39,7 +39,7 @@ android {
   Properties props = new Properties()
   def isKeyFound = 0
   def useBetaSdk = 0
-  props.setProperty("GOOGLE_MAPS_PLAY_SERVICES_VERSION", "18.0.0");
+  props.setProperty("GOOGLE_MAPS_PLAY_SERVICES_VERSION", "18.2.0");
   props.setProperty("ANDROID_SUPPORT_V4_VERSION", "27.1.1");
   props.setProperty("GOOGLE_MAPS_ANDROID_SDK", "");
 
@@ -90,7 +90,7 @@ android {
   println("---->ANDROID_SUPPORT_V4_VERSION = ${ANDROID_SUPPORT_V4_VERSION}")
   dependencies {
     implementation "com.google.android.gms:play-services-maps:${PLAY_SERVICES_VERSION}"
-    implementation "com.google.android.gms:play-services-location:${PLAY_SERVICES_VERSION}"
+    implementation "com.google.android.gms:play-services-location:18.0.0"
     implementation "com.android.support:support-core-utils:${ANDROID_SUPPORT_V4_VERSION}"
   }
 
